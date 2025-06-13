@@ -32,13 +32,17 @@ def curvature_from_map(map: sp.Array, variables: list, simplify: bool = True
     x = sp.Array(variables)
     jac = sp.Matrix(map.diff(x)).transpose()
     jact = jac.transpose()
-    metric = jact * jac
+    metric = sp.Array(jact * jac)
     if simplify:
+        print("Simplifying metric...")
         metric = sp.simplify(metric, inverse=True)
     emetric = ep.MetricTensor(metric, variables)
+    print("Calculating Riemann curvature...")
     riemann = ep.RiemannCurvatureTensor.from_metric(emetric)
     ricci = ep.RicciTensor.from_riemann(riemann)
+    scalar = ep.RicciScalar.from_riccitensor(ricci)
+    print("Scalar curvature = %s"%scalar.tensor())
 
     return {"Riemann": riemann,
             "Ricci": ricci,
-            "Scalar": ep.RicciScalar.from_riccitensor(ricci)}
+            "Scalar": scalar}
