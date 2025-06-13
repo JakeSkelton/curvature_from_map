@@ -10,10 +10,12 @@ import sympy as sp
 import einsteinpy.symbolic as ep
 
 # Symbols
-a1, b1, a2, b2, x1, x2 = sp.symbols(['a1', 'b1', 'a2', 'b2', 'x1', 'x2'])
+a11, a12, a21, a22, b1, b2, x1, x2 = sp.symbols(
+    ['a11', 'a12', 'a21', 'a22', 'b1', 'b2', 'x1', 'x2'], real=True)
 x = sp.Array([x1, x2])
 # Coordinate map
-map = sp.Array([a1*x2 + b1*x1*x2, a2*x1 + b2*x1*x2])
+map = sp.Array([a11*x1 + a12*x2 + b1*x1*x2,
+                a21*x1 + a22*x2 + b2*x1*x2])
 jac = sp.Matrix(map.diff(x)).transpose()
 jact = jac.transpose()
 # Pull-back metric
